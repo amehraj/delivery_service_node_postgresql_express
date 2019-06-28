@@ -50,6 +50,12 @@ function modifyOrder(req, res) {
       .catch(error => res.status(400).send(error));
   }
 
+  function viewAllOrders(req, res) {
+    return Order
+      .findAll()
+      .then(orders => res.status(200).send(orders));
+  }
 
 
-export default { addOrder, modifyOrder};
+
+export default { addOrder, modifyOrder, viewAllOrders};

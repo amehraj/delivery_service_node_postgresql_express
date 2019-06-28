@@ -1,5 +1,5 @@
-import signUp from '../controllers/user';
-import addItem from '../controllers/item';
+import UserFunctions from '../controllers/user';
+import ItemFunctions from '../controllers/item';
 import OrderFunctions from '../controllers/order';
 
 export default (app) => {
@@ -8,8 +8,15 @@ export default (app) => {
     message: 'Welcome to the BookStore API!',
   }));
 
-  app.post('/api/users', signUp); // API route for user to signup
-  app.post('/api/items', addItem);
+  app.post('/api/users', UserFunctions.signUp);
+  app.get('/api/userslist', UserFunctions.viewAllUsers);
+
+  app.post('/api/items', ItemFunctions.addItem);
+  app.get('/api/itemslist',ItemFunctions.viewAllItems);
+
   app.post('/api/orders', OrderFunctions.addOrder);
   app.post('/api/orders/:orderId', OrderFunctions.modifyOrder);
+  app.get('/api/orderslist', OrderFunctions.viewAllOrders);
+
+
 };
