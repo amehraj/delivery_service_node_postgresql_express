@@ -2,7 +2,7 @@
   "development": {
     "username": "postgres",
     "password": "12345",
-    "database": "database_development",
+    "database": "delivery_service",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "operatorsAliases": false
@@ -10,7 +10,7 @@
   "test": {
     "username": "postgres",
     "password": "12345",
-    "database": "database_test",
+    "database": "delivery_service",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "operatorsAliases": false
@@ -18,7 +18,7 @@
   "production": {
     "username": "postgres",
     "password": "12345",
-    "database": "database_production",
+    "database": "delivery_service",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "operatorsAliases": false
