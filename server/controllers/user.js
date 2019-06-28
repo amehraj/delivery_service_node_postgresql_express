@@ -18,5 +18,12 @@ function signUp(req, res) {
         }))
 }
 
+function viewAllUsers(req, res) {
+  return User
+    .findAll()
+    .then(users => res.status(200).send(users));
+}
 
-export default signUp;
+
+
+export default {signUp, viewAllUsers};

@@ -17,5 +17,11 @@ function addItem(req, res) {
         }))
 }
 
+function viewAllItems(req, res) {
+  return Item
+    .findAll()
+    .then(items => res.status(200).send(items));
+}
 
-export default addItem;
+
+export default { addItem, viewAllItems};
