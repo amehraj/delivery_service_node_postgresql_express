@@ -1,0 +1,24 @@
+{
+  "name": "delivery_service_node_postgresql_express",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/amehraj/delivery_service_node_postgresql_express.git",
+  "author": "amehraj <amehraj360@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "global": "^4.4.0",
+    "morgan": "^1.9.1",
+    "pg": "^7.11.0",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.8.12",
+    "sequelize-cli": "^5.5.0"
+  },
+  "scripts": {
+    "start": "nodemon --exec babel-node app.js"
+  }
+}
