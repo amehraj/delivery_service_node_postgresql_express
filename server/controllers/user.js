@@ -3,19 +3,58 @@ import model from '../models';
 const { User } = model;
 
 function signUp(req, res) {
-    const { name, username, email, password } = req.body
+    const { 
+      name, 
+      user_name, 
+      email, 
+      password, 
+      user_type, 
+    } = req.body
+
       return User
         .create({
           name,
-          username,
+          user_name,
           email,
-          password
+          password,
+          user_type,
         })
         .then(userData => res.status(201).send({
           success: true,
           message: 'User successfully created',
-          userData
+          userData,
         }))
+}
+
+function modifyUser(req, res) {
+  const { 
+    name, 
+    user_name, 
+    email, 
+    password, 
+    user_type,
+   } = req.body
+
+  return User
+    .findByPk(req.params.userId)
+    .then((user) => {
+      user.update({
+        name: name || user.name,
+        user_name: user_name || user.user_name,
+        email: email || user.email,
+        password: password || user.password,
+        user_type: user_type || user.user_type,
+      })
+      .then((updatedUser) => {
+        res.status(200).send({
+          message: 'User updated successfully',
+          data: updatedUser,
+
+        })
+      })
+      .catch(error => res.status(400).send(error));
+    })
+    .catch(error => res.status(400).send(error));
 }
 
 function viewAllUsers(req, res) {
@@ -26,4 +65,4 @@ function viewAllUsers(req, res) {
 
 
 
-export default {signUp, viewAllUsers};
+export default {signUp, viewAllUsers, modifyUser};

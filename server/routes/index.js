@@ -1,5 +1,5 @@
 import UserFunctions from '../controllers/user';
-import ItemFunctions from '../controllers/item';
+import ProductFunctions from '../controllers/product';
 import OrderFunctions from '../controllers/order';
 
 export default (app) => {
@@ -8,15 +8,18 @@ export default (app) => {
     message: 'Welcome to the BookStore API!',
   }));
 
-  app.post('/api/users', UserFunctions.signUp);
-  app.get('/api/userslist', UserFunctions.viewAllUsers);
+  app.post('/api/user', UserFunctions.signUp);
+  app.get('/api/userlist', UserFunctions.viewAllUsers);
+  app.put('/api/user/:userId', UserFunctions.modifyUser);
 
-  app.post('/api/items', ItemFunctions.addItem);
-  app.get('/api/itemslist',ItemFunctions.viewAllItems);
+  app.post('/api/product', ProductFunctions.addProduct);
+  app.get('/api/productlist', ProductFunctions.viewAllProducts);
+  app.put('/api/product/:productId', ProductFunctions.modifyProduct);
 
-  app.post('/api/orders', OrderFunctions.addOrder);
-  app.post('/api/orders/:orderId', OrderFunctions.modifyOrder);
-  app.get('/api/orderslist', OrderFunctions.viewAllOrders);
+  app.post('/api/order', OrderFunctions.addOrder);
+  app.get('/api/orderlist', OrderFunctions.viewAllOrders);
+  app.put('/api/order/:orderId', OrderFunctions.modifyOrder);
+
 
 
 };
