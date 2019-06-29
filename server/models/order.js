@@ -1,19 +1,19 @@
 export default (sequelize, DataTypes) => {
   const Order = sequelize.define('Order', {
-    itemid: {
+    product_id: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'Item',
+        model: 'Product',
         key: 'id',
-        as: 'itemid',
+        as: 'product_id',
       }
     },
-    userid: {
+    user_id: {
       type: DataTypes.INTEGER,
       references: {
         model: 'User',
         key: 'id',
-        as: 'userid',
+        as: 'user_id',
       }
     },
     quantity: {
@@ -23,14 +23,14 @@ export default (sequelize, DataTypes) => {
         msg: 'Pease input input quantity'
       }
     },
-    totalprice: {
+    total_price: {
       type: DataTypes.INTEGER,
       allowNull: {
         args: false,
-        msg: 'Pease input totalprice'
+        msg: 'Pease input total price'
       }
     },
-    discountprice: {
+    discount_price: {
       type: DataTypes.INTEGER,
       allowNull: {
         args: false,
@@ -48,6 +48,10 @@ export default (sequelize, DataTypes) => {
   }, {});
   Order.associate = (models) => {
     // associations can be defined here
+    Order.belongsTo(models.User, {
+      foreignKey: 'user_id',
+      onDelete: 'CASCADE'
+    });
   };
   return Order;
 };
