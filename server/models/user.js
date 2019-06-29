@@ -7,7 +7,7 @@ export default (sequelize, DataTypes) => {
         msg: 'Please enter your name'
       }
     },
-    username: {
+    login_id: {
       type: DataTypes.STRING,
       allowNull: {
         args: false,
