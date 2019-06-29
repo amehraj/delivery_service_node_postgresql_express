@@ -7,7 +7,7 @@ export default (sequelize, DataTypes) => {
         msg: 'Please enter your name'
       }
     },
-    login_id: {
+    user_name: {
       type: DataTypes.STRING,
       allowNull: {
         args: false,
@@ -44,10 +44,21 @@ export default (sequelize, DataTypes) => {
           }
         },
       },
-    }
+    },
+    user_type: {
+      type: DataTypes.STRING,
+      allowNull: {
+        args: false,
+        msg: 'Please enter your User Type'
+      }
+    },
+
   }, {});
   User.associate = (models) => {
     // associations can be defined here
+    User.hasMany(models.Order, {
+      foreignKey: 'user_id',
+    });
   };
   return User;
 };

@@ -3,46 +3,57 @@ import model from '../models';
 const { Order } = model;
 
 function addOrder(req, res) {
-    const { itemid, userid, quantity, totalprice, discountprice, status} = req.body
+    const { 
+      product_id, 
+      user_id, 
+      quantity, 
+      total_price, 
+      discount_price, 
+      status,
+    } = req.body
+
       return Order
         .create({
-          itemid,
-          userid,
+          product_id,
+          user_id,
           quantity,
-          totalprice,
-          discountprice,
-          status
+          total_price,
+          discount_price,
+          status, 
+          
         })
-        .then(userData => res.status(201).send({
+        .then(productData => res.status(201).send({
           success: true,
           message: 'Order successfully created',
-          userData
+          productData
         }))
 }
 function modifyOrder(req, res) {
-    const { itemid, userid, quantity, totalprice, discountprice, status } = req.body
+    const { 
+      product_id, 
+      user_id, 
+      quantity, 
+      total_price, 
+      discount_price, 
+      status, 
+    } = req.body
+    
     return Order
       .findByPk(req.params.orderId)
       .then((order) => {
         order.update({
-          itemid: itemid || order.itemid,
-          userid: userid || order.userid,
+          product_id: product_id || order.product_id,
+          user_id: user_id || order.user_id,
           quantity: quantity || order.quantity,
-          totalprice: totalprice || order.totalprice,
-          discountprice: discountprice || order.discountprice,
+          total_price: total_price || order.total_price,
+          discount_price: discount_price || order.discount_price,
           status: status || order.status,
         })
         .then((updatedOrder) => {
           res.status(200).send({
             message: 'Order updated successfully',
-            data: {
-                itemid: itemid || updatedOrder.itemid,
-                userid: userid || updatedOrder.userid,
-                quantity: quantity || updatedOrder.quantity,
-                totalprice: totalprice || updatedOrder.totalprice,
-                discountprice: discountprice || updatedOrder.discountprice,
-                status: status || updatedOrder.status,
-            }
+            data: updatedOrder,
+
           })
         })
         .catch(error => res.status(400).send(error));
