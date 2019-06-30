@@ -24,10 +24,12 @@ module.exports = {
         type: Sequelize.STRING
       },
       created_at: {
+        field: 'createdAt',
         allowNull: false,
         type: Sequelize.DATE
       },
       updated_at: {
+        field: 'updatedAt',
         allowNull: false,
         type: Sequelize.DATE
       }

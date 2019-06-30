@@ -44,6 +44,7 @@ export default (sequelize, DataTypes) => {
           }
         },
       },
+      
     },
     user_type: {
       type: DataTypes.STRING,
