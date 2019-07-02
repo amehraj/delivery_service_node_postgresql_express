@@ -55,5 +55,25 @@ function viewAllProducts(req, res) {
     .then(products => res.status(200).send(products));
 }
 
+function deleteProduct (req, res) {
+  return Product
+    .findByPk(req.params.productId)
+    .then(product => {
+      if(!product) {
+        return res.status(400).send({
+        message: 'Product Not Found',
+        });
+      }
+      return product
+        .destroy()
+        .then(() => res.status(200).send({
+          message: 'Product successfully deleted'
+        }))
+        .catch(error => res.status(400).send(error));
+    })
+    .catch(error => res.status(400).send(error))
+}
 
-export default { addProduct, viewAllProducts, modifyProduct};
+
+
+export default { addProduct, viewAllProducts, modifyProduct, deleteProduct};
