@@ -67,6 +67,23 @@ function modifyOrder(req, res) {
       .then(orders => res.status(200).send(orders));
   }
 
+  function deleteOrder (req, res) {
+    return Order
+      .findByPk(req.params.orderId)
+      .then(order => {
+        if(!order) {
+          return res.status(400).send({
+          message: 'Order Not Found',
+          });
+        }
+        return order
+          .destroy()
+          .then(() => res.status(200).send({
+            message: 'Order successfully deleted'
+          }))
+          .catch(error => res.status(400).send(error));
+      })
+      .catch(error => res.status(400).send(error))
+  }
 
-
-export default { addOrder, modifyOrder, viewAllOrders};
+export default { addOrder, modifyOrder, viewAllOrders, deleteOrder};

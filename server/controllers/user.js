@@ -63,6 +63,24 @@ function viewAllUsers(req, res) {
     .then(users => res.status(200).send(users));
 }
 
+function deleteUser (req, res) {
+  return User
+    .findByPk(req.params.userId)
+    .then(user => {
+      if(!user) {
+        return res.status(400).send({
+        message: 'User Not Found',
+        });
+      }
+      return user
+        .destroy()
+        .then(() => res.status(200).send({
+          message: 'User successfully deleted'
+        }))
+        .catch(error => res.status(400).send(error));
+    })
+    .catch(error => res.status(400).send(error))
+}
 
 
-export default {signUp, viewAllUsers, modifyUser};
+export default {signUp, viewAllUsers, modifyUser, deleteUser};
