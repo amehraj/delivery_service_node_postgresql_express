@@ -46,6 +46,13 @@ function modifyUser(req, res) {
         user_type: user_type || user.user_type,
       })
       .then((updatedUser) => {
+
+        const toOmit = '/' + req.params.userId;
+        const omitLength = toOmit.length;
+
+        console.log(res.locals.cacheKey.slice(0,-omitLength), res.locals.cacheKey);
+
+        res.locals.cacheConnection.del(res.locals.cacheKey.slice(0,-omitLength));
         res.status(200).send({
           message: 'User updated successfully',
           data: updatedUser,
@@ -60,7 +67,12 @@ function modifyUser(req, res) {
 function viewAllUsers(req, res) {
   return User
     .findAll()
-    .then(users => res.status(200).send(users));
+    .then(users => {
+
+      res.locals.cacheConnection.set(res.locals.cacheKey, JSON.stringify(users));
+      return res.status(200).send(users);
+
+    });
 }
 
 function deleteUser (req, res) {
