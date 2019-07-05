@@ -22,11 +22,18 @@ function addOrder(req, res) {
           status, 
           
         })
-        .then(productData => res.status(201).send({
+        .then((productData) => {
+
+          res.locals.cacheConnection.del(res.locals.cacheKey);
+          
+          res.status(201).send({
           success: true,
           message: 'Order successfully created',
           productData
-        }))
+        })
+        
+      })
+      .catch(error => res.status(400).send(error));
 }
 function modifyOrder(req, res) {
     const { 
@@ -50,7 +57,14 @@ function modifyOrder(req, res) {
           status: status || order.status,
         })
         .then((updatedOrder) => {
-          res.status(200).send({
+            const toOmit = '/' + req.params.orderId;
+            const omitLength = toOmit.length;
+    
+            console.log(res.locals.cacheKey.slice(0,-omitLength), res.locals.cacheKey);
+    
+            res.locals.cacheConnection.del(res.locals.cacheKey.slice(0,-omitLength));
+
+            res.status(200).send({
             message: 'Order updated successfully',
             data: updatedOrder,
 
@@ -64,7 +78,12 @@ function modifyOrder(req, res) {
   function viewAllOrders(req, res) {
     return Order
       .findAll()
-      .then(orders => res.status(200).send(orders));
+      .then((orders) => {
+        
+        res.locals.cacheConnection.set(res.locals.cacheKey, JSON.stringify(orders));
+        res.status(200).send(orders)
+        
+      });
   }
 
   function deleteOrder (req, res) {
@@ -78,9 +97,19 @@ function modifyOrder(req, res) {
         }
         return order
           .destroy()
-          .then(() => res.status(200).send({
+          .then(() => {
+
+            const toOmit = '/' + req.params.orderId;
+            const omitLength = toOmit.length;
+    
+            console.log(res.locals.cacheKey.slice(0,-omitLength), res.locals.cacheKey);
+    
+            res.locals.cacheConnection.del(res.locals.cacheKey.slice(0,-omitLength));
+
+            res.status(200).send({
             message: 'Order successfully deleted'
-          }))
+          })
+        })
           .catch(error => res.status(400).send(error));
       })
       .catch(error => res.status(400).send(error))
