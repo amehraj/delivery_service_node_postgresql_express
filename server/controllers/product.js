@@ -15,11 +15,17 @@ function addProduct(req, res) {
           price,
           discount_price,
         })
-        .then(productData => res.status(201).send({
+        .then((productData) => {
+          
+          res.locals.cacheConnection.del(res.locals.cacheKey);
+          res.status(201).send({
           success: true,
           message: 'Product successfully created',
           productData,
-        }))
+        })
+        
+      })
+      .catch(error => res.status(400).send(error));
 }
 
 function modifyProduct(req, res) {
@@ -38,6 +44,13 @@ function modifyProduct(req, res) {
         discount_price: discount_price || product.discount_price,
       })
       .then((updatedProduct) => {
+        const toOmit = '/' + req.params.productId;
+        const omitLength = toOmit.length;
+
+        console.log(res.locals.cacheKey.slice(0,-omitLength), res.locals.cacheKey);
+
+        res.locals.cacheConnection.del(res.locals.cacheKey.slice(0,-omitLength));
+
         res.status(200).send({
           message: 'Product updated successfully',
           data: updatedProduct,
@@ -52,7 +65,10 @@ function modifyProduct(req, res) {
 function viewAllProducts(req, res) {
   return Product
     .findAll()
-    .then(products => res.status(200).send(products));
+    .then((products) => {
+      res.locals.cacheConnection.set(res.locals.cacheKey, JSON.stringify(products));
+      res.status(200).send(products);
+    });
 }
 
 function deleteProduct (req, res) {
@@ -66,9 +82,19 @@ function deleteProduct (req, res) {
       }
       return product
         .destroy()
-        .then(() => res.status(200).send({
+        .then(() => {
+          const toOmit = '/' + req.params.productId;
+          const omitLength = toOmit.length;
+
+          console.log(res.locals.cacheKey.slice(0,-omitLength), res.locals.cacheKey);
+
+          res.locals.cacheConnection.del(res.locals.cacheKey.slice(0,-omitLength));
+
+          res.status(200).send({
           message: 'Product successfully deleted'
-        }))
+        })
+
+      })
         .catch(error => res.status(400).send(error));
     })
     .catch(error => res.status(400).send(error))

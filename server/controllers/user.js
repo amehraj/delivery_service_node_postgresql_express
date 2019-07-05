@@ -19,11 +19,17 @@ function signUp(req, res) {
           password,
           user_type,
         })
-        .then(userData => res.status(201).send({
+        .then((userData) => {
+
+          res.locals.cacheConnection.del(res.locals.cacheKey);
+
+          res.status(201).send({
           success: true,
           message: 'User successfully created',
           userData,
-        }))
+        })
+      })
+      .catch(error => res.status(400).send(error));
 }
 
 function modifyUser(req, res) {
@@ -67,10 +73,10 @@ function modifyUser(req, res) {
 function viewAllUsers(req, res) {
   return User
     .findAll()
-    .then(users => {
+    .then((users) => {
 
       res.locals.cacheConnection.set(res.locals.cacheKey, JSON.stringify(users));
-      return res.status(200).send(users);
+      res.status(200).send(users);
 
     });
 }
@@ -86,9 +92,18 @@ function deleteUser (req, res) {
       }
       return user
         .destroy()
-        .then(() => res.status(200).send({
+        .then(() => {
+          const toOmit = '/' + req.params.userId;
+          const omitLength = toOmit.length;
+
+          console.log(res.locals.cacheKey.slice(0,-omitLength), res.locals.cacheKey);
+
+          res.locals.cacheConnection.del(res.locals.cacheKey.slice(0,-omitLength));
+          
+          res.status(200).send({
           message: 'User successfully deleted'
-        }))
+          })
+        })
         .catch(error => res.status(400).send(error));
     })
     .catch(error => res.status(400).send(error))
